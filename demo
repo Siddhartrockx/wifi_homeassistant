@@ -1,0 +1,63 @@
+I use HomeAssistant to get my Google Home / Google Nest Hub devices and speakers to support Apple Airplay. I use this HomeAssistant Add On called AirCast. This means you can use Apple AirPlay on any Google Nest product in a completely wireless way. It works like a dream and saved me from having to buy Apple HomePods for every room.
+
+I use a Rasberry Pi 3 (not the 3B, the 3) for HomeAssistant and it runs well, although I do wish I had a Raspberry Pi 4. Ha!
+
+Setting up HomeAssistant is straightforward. You download the appropriate HomeAssistant version from GitHub and then use Balena Etcher to write it to your microSD card. PiMyLifeUp has some good instructions on how to setup HomeAssistant but I couldn’t get WiFi to work with HomeAssistant.
+
+Every HomeAssistant setup guide tells you to create a CONFIG folder, then a network folder, then a my-network file with various configuration contents. All of which I did, but my HomeAssistant wouldn’t connect to WiFi. It seems all the CONFIG guides are wrong, or I kept missing some fundamental piece of information. It was frustrating.
+
+The GOOD NEWS is there is a fix for HomeAssistant WiFi and there is an alternative to the CONFIG file HomeAssistant setup. You can configure HomeAssistant WiFi from the command line after HomeAssistant boots. So if you’re stuck, I have the HomeAssistant WiFi setup guide you need!
+
+How to Setup WiFi on HomeAssistant (without CONFIG files)
+This assumes you already have HomeAssistant installed on a microSD card and can boot. Be patient during the boot process, it can take 2-3 minutes to get to the command line.
+
+Connect your Raspberry Pi to HDMI and an external monitor or TV, and connect an external keyboard.
+Power on your Raspberry Pi.
+Wait for the Home Assistant OS to boot. This takes 2-3min and you should see a lot of text scroll by showing various components loading.
+Tip: During the boot process you may also see some pauses as it tries to connect or load something, just be patient.
+
+After Home Assistant boots, you see the Command Line Interface, it will look something like as follows:
+*************
+ha >
+************
+
+ Tip: That’s ha for HomeAssistant, it’s not laughing at your WiFi misfortune…
+
+
+Type in the following command.
+*********************************************************************************************************
+network info
+*********************************************************************************************************
+
+
+
+
+n the text that displays, it will show a list of network interfaces. Find your WiFi interface, the default is wlan0 – which should be yours unless you have an external WiFi adapter or some odd setup.
+Run the following command, replacing text as follows:
+
+<interface_name> is the name of your WiFi adapter, in my case it was wlan0.
+
+If in doubt, safe to try this first. Please note the final letter in wlan0 is a zero.
+
+<WiFi_network> is the name (SSID) of your WiFi network.
+
+You must use quotes around this if your SSID has spaces in the name.
+
+<WiFi_password> is your WiFi password.
+
+
+************************************************************************************************************************************************************************
+network update <interface_name> --ipv4-method auto --ipv6-method auto --wifi-auth wpa-psk --wifi-mode infrastructure --wifi-ssid <WiFi_network> --wifi-psk <WiFi_password>
+*************************************************************************************************************************************************************************
+
+Tip: If you. make a mistake, don’t forget you can use the arrow up key to reload the previous command, then the arrow keys to navigate the command to insert or delete where you made a mistake. If you miskey the SSID or password, just run the above command again with the correct information.
+
+Hit Enter. You will get a confirmation message that your WiFi network is now saved and configured.
+You can now check the status of the connection and find your HomeAssist WiFi IP address by typing this command again
+network infoCopy
+You’re done! You can now browse to the web dashboard and patiently wait ~20min for the setup to complete.
+Tip: I have found that I can only (and more reliably) browse the HomeAssist web interface by using the IP address. So set the HomeAssist IP as a static IP address in your router. A static IP means you can safely bookmark the HomeAssistant web interface and don’t need to worry about the IP changing in a power outage. Just remember you need to add the port number to the end e.g. http://<IP_Address:3128) to browse to the HomeAssist dashboard.
+
+Hope this all helps someone else.
+
+Important: I am not affiliated with any of the manufacturers, brands, services, or websites listed on this page and this is my personal experience.  If you find this helpful and want to say thanks, please buy me a coffee or take a look at my book on Amazon. It keeps this page ad-free. Thank you!
